@@ -6,6 +6,36 @@ const { getOrCreateThreadForApplication } = require("./applications");
 function buildDemandsRouter() {
   const router = express.Router();
 
+  router.get("/mine", async (req, res) => {
+    if (!req.user || req.user.role !== "PARENT") return res.status(403).json({ error: "FORBIDDEN" });
+
+    const limit = Math.min(Math.max(Number(req.query?.limit || "30"), 1), 100);
+    const cursorId = req.query?.cursor ? Number(req.query.cursor) : null;
+    const where = cursorId ? { parentId: req.user.id, id: { lt: cursorId } } : { parentId: req.user.id };
+
+    const rows = await prisma.demand.findMany({
+      where,
+      orderBy: { id: "desc" },
+      take: limit,
+      select: {
+        id: true,
+        parentId: true,
+        subject: true,
+        studentGrade: true,
+        timeStartAt: true,
+        timeEndAt: true,
+        teacherGenderPreference: true,
+        minPrice: true,
+        maxPrice: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+    const items = rows.reverse();
+    const nextCursor = rows.length === limit ? String(rows[rows.length - 1].id) : null;
+    return res.json({ items, nextCursor });
+  });
+
   router.post("/", async (req, res) => {
     if (!req.user || req.user.role !== "PARENT") return res.status(403).json({ error: "FORBIDDEN" });
 
@@ -142,4 +172,3 @@ function buildDemandsRouter() {
 }
 
 module.exports = { buildDemandsRouter };
-

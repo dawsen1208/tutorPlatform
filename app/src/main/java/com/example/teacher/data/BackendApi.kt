@@ -123,6 +123,11 @@ data class BackendMessagesResponse(
     val nextCursor: String? = null,
 )
 
+data class BackendApplicationListResponse(
+    val items: List<BackendApplicationDto>,
+    val nextCursor: String? = null,
+)
+
 private interface BackendService {
     @GET("/health")
     suspend fun health(): JsonObject
@@ -142,11 +147,25 @@ private interface BackendService {
         @Body body: BackendCreateApplicationRequest,
     ): BackendCreateApplicationResponse
 
+    @GET("/api/applications/mine")
+    suspend fun myApplications(
+        @Header("Authorization") authorization: String,
+        @Query("limit") limit: Int = 30,
+        @Query("cursor") cursor: String? = null,
+    ): BackendApplicationListResponse
+
     @POST("/api/demands")
     suspend fun createDemand(
         @Header("Authorization") authorization: String,
         @Body body: BackendCreateDemandRequest,
     ): BackendCreateDemandResponse
+
+    @GET("/api/demands/mine")
+    suspend fun myDemands(
+        @Header("Authorization") authorization: String,
+        @Query("limit") limit: Int = 30,
+        @Query("cursor") cursor: String? = null,
+    ): BackendDemandListResponse
 
     @GET("/api/demands/open")
     suspend fun openDemands(
@@ -285,6 +304,10 @@ object BackendApi {
         return service.createApplication("Bearer $accessToken", BackendCreateApplicationRequest(teacherId = teacherId))
     }
 
+    suspend fun myApplications(accessToken: String, limit: Int = 30, cursor: String? = null): BackendApplicationListResponse {
+        return service.myApplications("Bearer $accessToken", limit, cursor)
+    }
+
     suspend fun createDemand(
         accessToken: String,
         subject: String,
@@ -311,6 +334,10 @@ object BackendApi {
 
     suspend fun openDemands(accessToken: String, limit: Int = 30, cursor: String? = null): BackendDemandListResponse {
         return service.openDemands("Bearer $accessToken", limit, cursor)
+    }
+
+    suspend fun myDemands(accessToken: String, limit: Int = 30, cursor: String? = null): BackendDemandListResponse {
+        return service.myDemands("Bearer $accessToken", limit, cursor)
     }
 
     suspend fun claimDemand(accessToken: String, demandId: Int): BackendClaimDemandResponse {

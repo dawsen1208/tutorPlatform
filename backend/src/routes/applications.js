@@ -30,6 +30,29 @@ async function getOrCreateThreadForApplication(applicationId) {
 function buildApplicationsRouter() {
   const router = express.Router();
 
+  router.get("/mine", async (req, res) => {
+    const user = req.user;
+    if (!user) return res.status(401).json({ error: "UNAUTHORIZED" });
+    if (user.role !== "PARENT" && user.role !== "TEACHER") return res.status(403).json({ error: "FORBIDDEN" });
+
+    const limit = Math.min(Math.max(Number(req.query?.limit || "30"), 1), 100);
+    const cursorId = req.query?.cursor ? Number(req.query.cursor) : null;
+
+    const whereBase = user.role === "PARENT" ? { parentId: user.id } : { teacherId: user.id };
+    const where = cursorId ? { ...whereBase, id: { lt: cursorId } } : whereBase;
+
+    const rows = await prisma.application.findMany({
+      where,
+      orderBy: { id: "desc" },
+      take: limit,
+      select: { id: true, parentId: true, teacherId: true, status: true, createdAt: true },
+    });
+
+    const items = rows.reverse();
+    const nextCursor = rows.length === limit ? String(rows[rows.length - 1].id) : null;
+    return res.json({ items, nextCursor });
+  });
+
   router.post("/", async (req, res) => {
     const schema = z.object({ teacherId: z.number().int().positive() });
     const parsed = schema.safeParse(req.body);
@@ -85,4 +108,3 @@ function buildApplicationsRouter() {
 }
 
 module.exports = { buildApplicationsRouter, getOrCreateThreadForApplication };
-
