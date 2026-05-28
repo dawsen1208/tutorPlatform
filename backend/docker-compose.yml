@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tutor_platform
+    ports:
+      - "3306:3306"
+    volumes:
+      - tutor_platform_mysql:/var/lib/mysql
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: "8080"
+      DATABASE_URL: mysql://root:root@mysql:3306/tutor_platform
+      JWT_SECRET: replace_me
+      PHONE_HASH_SECRET: replace_me
+      NODE_ENV: production
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+
+volumes:
+  tutor_platform_mysql:

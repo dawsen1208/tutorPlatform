@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PARENT
+  TEACHER
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+enum RefType {
+  APPLICATION
+  DEMAND
+}
+
+enum DemandStatus {
+  OPEN
+  CLAIMED
+  CLOSED
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  role         Role
+  phoneHash    String   @unique
+  passwordHash String
+  nickname     String
+  avatarUrl    String?
+  createdAt    DateTime @default(now())
+
+  parentApplications  Application[] @relation("ParentApplications")
+  teacherApplications Application[] @relation("TeacherApplications")
+
+  demands       Demand[] @relation("ParentDemands")
+  claimedDemands Demand[] @relation("ClaimedDemands")
+
+  parentThreads  ChatThread[] @relation("ParentThreads")
+  teacherThreads ChatThread[] @relation("TeacherThreads")
+
+  messages ChatMessage[] @relation("UserMessages")
+
+  deviceTokens DeviceToken[]
+}
+
+model Application {
+  id        Int               @id @default(autoincrement())
+  parentId  Int
+  teacherId Int
+  status    ApplicationStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+
+  parent  User @relation("ParentApplications", fields: [parentId], references: [id])
+  teacher User @relation("TeacherApplications", fields: [teacherId], references: [id])
+
+  @@index([parentId, createdAt])
+  @@index([teacherId, createdAt])
+}
+
+model Demand {
+  id                     Int          @id @default(autoincrement())
+  parentId               Int
+  subject                String
+  studentGrade           String
+  timeStartAt            DateTime
+  timeEndAt              DateTime
+  teacherGenderPreference String?
+  minPrice               Float
+  maxPrice               Float
+  status                 DemandStatus @default(OPEN)
+  claimedTeacherId       Int?
+  createdAt              DateTime     @default(now())
+  updatedAt              DateTime     @updatedAt
+
+  parent        User  @relation("ParentDemands", fields: [parentId], references: [id])
+  claimedTeacher User? @relation("ClaimedDemands", fields: [claimedTeacherId], references: [id])
+
+  @@index([status, createdAt])
+  @@index([parentId, createdAt])
+  @@index([claimedTeacherId, createdAt])
+}
+
+model ChatThread {
+  id        Int      @id @default(autoincrement())
+  refType   RefType
+  refId     Int
+  parentId  Int
+  teacherId Int
+  createdAt DateTime @default(now())
+
+  parent  User @relation("ParentThreads", fields: [parentId], references: [id])
+  teacher User @relation("TeacherThreads", fields: [teacherId], references: [id])
+
+  messages ChatMessage[]
+
+  @@unique([refType, refId])
+  @@index([parentId, createdAt])
+  @@index([teacherId, createdAt])
+}
+
+model ChatMessage {
+  id         Int      @id @default(autoincrement())
+  threadId   Int
+  senderId   Int
+  senderRole Role
+  content    String
+  createdAt  DateTime @default(now())
+
+  thread ChatThread @relation(fields: [threadId], references: [id])
+  sender User       @relation("UserMessages", fields: [senderId], references: [id])
+
+  @@index([threadId, createdAt])
+}
+
+model DeviceToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  platform  String
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
