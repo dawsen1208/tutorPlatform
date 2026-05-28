@@ -13,7 +13,7 @@ function buildAuthRouter({ jwtSecret, phoneHashSecret }) {
         role: z.enum(["PARENT", "TEACHER"]),
         phone: z.string().min(5).max(32),
         password: z.string().min(4).max(64),
-        nickname: z.string().min(1).max(32).optional(),
+        nickname: z.union([z.string().min(1).max(32), z.null()]).optional(),
       });
     const parsed = schema.safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ error: "INVALID_INPUT" });
@@ -29,7 +29,7 @@ function buildAuthRouter({ jwtSecret, phoneHashSecret }) {
         role,
         phoneHash,
         passwordHash,
-        nickname: nickname || (role === "PARENT" ? "家长用户" : "老师用户"),
+        nickname: (nickname || "").trim() || (role === "PARENT" ? "家长用户" : "老师用户"),
       },
       select: { id: true, role: true, nickname: true, avatarUrl: true },
     });
@@ -64,4 +64,3 @@ function buildAuthRouter({ jwtSecret, phoneHashSecret }) {
 }
 
 module.exports = { buildAuthRouter };
-
