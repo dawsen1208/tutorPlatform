@@ -22,13 +22,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders["usesCleartextTraffic"] = "true"
-        buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.10.111:8081/\"")
+        buildConfigField("String", "BACKEND_BASE_URL", "\"http://82.156.48.155:8081/\"")
     }
 
     buildTypes {
         debug {
             manifestPlaceholders["usesCleartextTraffic"] = "true"
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://192.168.10.111:8081/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"http://82.156.48.155:8081/\"")
         }
         release {
             isMinifyEnabled = false

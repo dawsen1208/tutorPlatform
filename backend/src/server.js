@@ -54,6 +54,15 @@ app.get("/", (_req, res) => {
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
+app.get("/health/db", async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return res.json({ ok: true, db: true });
+  } catch (err) {
+    const msg = err?.message || String(err);
+    return res.status(500).json({ ok: false, db: false, error: msg });
+  }
+});
 
 app.use("/api/auth", buildAuthRouter({ jwtSecret, phoneHashSecret }));
 
@@ -88,7 +97,18 @@ const portEnv = process.env.PORT;
 const allowPortFallback = !portEnv || String(portEnv).trim() === "" || String(portEnv).trim() === "8080";
 
 app.use((err, _req, res, _next) => {
-  return res.status(500).json({ error: "INTERNAL_ERROR" });
+  const classifyReason = (e) => {
+    const msg = String(e?.message || "").toLowerCase();
+    if (msg.includes("database_url")) return "DB_CONFIG_MISSING";
+    if (msg.includes("p1001") || msg.includes("can't reach database server") || msg.includes("connect")) return "DB_CONNECT_FAILED";
+    if (msg.includes("doesn't exist") || msg.includes("unknown table") || msg.includes("no such table")) return "DB_SCHEMA_MISSING";
+    return "UNKNOWN";
+  };
+  const isProd = String(process.env.NODE_ENV || "").trim() === "production";
+  const message = err?.message || String(err);
+  const reason = classifyReason(err);
+  if (!isProd) console.error(err);
+  return res.status(500).json({ error: "INTERNAL_ERROR", reason, message: isProd ? undefined : message });
 });
 
 const server = http.createServer(app);
