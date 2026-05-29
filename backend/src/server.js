@@ -40,7 +40,7 @@ app.get("/", (_req, res) => {
         "<head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'></head>",
         "<body style='font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding: 24px'>",
         "<h2>tutor-platform-backend</h2>",
-        "<p>服务已启动。</p>",
+        "<p>服务已启动（auto deploy test）。</p>",
         "<ul>",
         "<li><a href='/health'>GET /health</a></li>",
         "<li>POST /api/auth/register</li>",
