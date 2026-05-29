@@ -1,0 +1,44 @@
+name: Deploy Backend (SSH)
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/**"
+      - ".github/workflows/deploy-backend.yml"
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: |
+            set -euo pipefail
+
+            if docker compose version >/dev/null 2>&1; then
+              COMPOSE="docker compose"
+            else
+              COMPOSE="docker-compose"
+            fi
+
+            cd "${{ secrets.DEPLOY_PATH }}"
+            git fetch --all --prune
+            git reset --hard origin/main
+
+            cd backend
+            $COMPOSE ps
+            $COMPOSE up -d --no-deps --build api
+            $COMPOSE logs --tail=120 api
+
+            curl -fsS http://127.0.0.1:8081/health >/dev/null
+            curl -fsS http://127.0.0.1:8081/health/db >/dev/null
