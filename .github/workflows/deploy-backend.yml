@@ -15,19 +15,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Upload backend to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
-          source: "backend/**"
-          target: ${{ secrets.DEPLOY_PATH }}
-
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -36,24 +23,51 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT }}
           script: |
-            set -euo pipefail
-
-            if docker compose version >/dev/null 2>&1; then
-              COMPOSE="docker compose"
-            else
-              COMPOSE="docker-compose"
-            fi
-
+            set -e
             cd "${{ secrets.DEPLOY_PATH }}"
-            cd backend
-            $COMPOSE ps
-            $COMPOSE up -d --no-deps --build api
-            $COMPOSE logs --tail=120 api
+            git config --global http.lowSpeedLimit 1000
+            git config --global http.lowSpeedTime 60
 
-            if curl -fsS http://127.0.0.1:8081/health >/dev/null 2>&1; then
-              curl -fsS http://127.0.0.1:8081/health >/dev/null
-              curl -fsS http://127.0.0.1:8081/health/db >/dev/null
-            else
-              curl -fsS http://127.0.0.1:8080/health >/dev/null
-              curl -fsS http://127.0.0.1:8080/health/db >/dev/null
-            fi
+            echo "Fetching latest code..."
+            for i in 1 2 3 4 5; do
+              if git fetch --depth=1 origin main; then
+                echo "git fetch succeeded"
+                break
+              fi
+              echo "git fetch failed, retry $i/5..."
+              sleep 15
+            done
+
+            git reset --hard origin/main
+
+            cd backend
+
+            echo "Deploying API only..."
+            docker compose up -d --no-deps --build api
+
+            echo "Waiting for API /health..."
+            for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
+              if curl -fsS http://127.0.0.1:8080/health; then
+                echo "API health OK"
+                break
+              fi
+              echo "API not ready yet, retry $i/12..."
+              docker logs --tail=30 backend-api-1 || true
+              sleep 5
+            done
+
+            echo "Checking DB health..."
+            for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
+              if curl -fsS http://127.0.0.1:8080/health/db; then
+                echo "DB health OK"
+                break
+              fi
+              echo "DB health not ready yet, retry $i/12..."
+              docker logs --tail=30 backend-api-1 || true
+              sleep 5
+            done
+
+            curl -f http://127.0.0.1:8080/health
+            curl -f http://127.0.0.1:8080/health/db
+
+            docker ps

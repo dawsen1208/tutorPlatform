@@ -16,8 +16,8 @@ services:
     environment:
       PORT: "8080"
       DATABASE_URL: mysql://root:root@mysql:3306/tutor_platform
-      JWT_SECRET: replace_me
-      PHONE_HASH_SECRET: replace_me
+      JWT_SECRET: "${JWT_SECRET}"
+      PHONE_HASH_SECRET: "${PHONE_HASH_SECRET}"
       NODE_ENV: production
     ports:
       - "8080:8080"
