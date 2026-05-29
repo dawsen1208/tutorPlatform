@@ -15,6 +15,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload backend to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          source: "backend/**"
+          target: ${{ secrets.DEPLOY_PATH }}
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -32,13 +45,15 @@ jobs:
             fi
 
             cd "${{ secrets.DEPLOY_PATH }}"
-            git fetch --all --prune
-            git reset --hard origin/main
-
             cd backend
             $COMPOSE ps
             $COMPOSE up -d --no-deps --build api
             $COMPOSE logs --tail=120 api
 
-            curl -fsS http://127.0.0.1:8080/health >/dev/null
-            curl -fsS http://127.0.0.1:8080/health/db >/dev/null
+            if curl -fsS http://127.0.0.1:8081/health >/dev/null 2>&1; then
+              curl -fsS http://127.0.0.1:8081/health >/dev/null
+              curl -fsS http://127.0.0.1:8081/health/db >/dev/null
+            else
+              curl -fsS http://127.0.0.1:8080/health >/dev/null
+              curl -fsS http://127.0.0.1:8080/health/db >/dev/null
+            fi
