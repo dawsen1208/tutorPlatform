@@ -179,12 +179,12 @@ fun JiaonilaileApp(
         checkingToken = false
     }
 
-    val content = @Composable {
+    val content: @Composable () -> Unit = content@{
         if (checkingToken) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
-            return@Composable
+            return@content
         }
         AppNavGraph(
             appRepository = appRepository,
