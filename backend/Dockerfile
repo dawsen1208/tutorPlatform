@@ -2,14 +2,15 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 
-RUN npm install
+RUN npm ci --omit=dev
 
 COPY prisma ./prisma
 RUN npx prisma generate
 
 COPY src ./src
+COPY public ./public
 
 ENV PORT=8080
 EXPOSE 8080
