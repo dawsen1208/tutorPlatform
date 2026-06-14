@@ -18,25 +18,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload backend files
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
-          source: "backend"
-          target: ${{ secrets.DEPLOY_PATH }}
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p "${{ secrets.DEPLOY_PORT }}" -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Archive backend files
+        run: tar -czf backend.tgz backend
+
+      - name: Upload backend archive
+        run: |
+          scp -P "${{ secrets.DEPLOY_PORT }}" backend.tgz \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/backend.tgz"
 
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
-          script: |
+        run: |
+          ssh -p "${{ secrets.DEPLOY_PORT }}" "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" <<'EOF'
             set -e
+            mkdir -p "${{ secrets.DEPLOY_PATH }}"
+            tar -xzf "${{ secrets.DEPLOY_PATH }}/backend.tgz" -C "${{ secrets.DEPLOY_PATH }}"
+            rm -f "${{ secrets.DEPLOY_PATH }}/backend.tgz"
             cd "${{ secrets.DEPLOY_PATH }}/backend"
 
             echo "Deploying API only..."
@@ -68,3 +71,4 @@ jobs:
             curl -f http://127.0.0.1:8080/health/db
 
             docker compose ps
+          EOF
