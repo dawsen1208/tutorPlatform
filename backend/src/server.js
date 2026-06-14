@@ -33,10 +33,10 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("combined"));
-app.use(express.static(publicDir));
+app.use(express.static(publicDir, { index: false }));
 
 app.get("/", (_req, res) => {
-  return res.sendFile(downloadPagePath);
+  return res.redirect(302, "/download");
 });
 
 app.get("/download", (_req, res) => {
