@@ -1051,7 +1051,7 @@ fun LoginTabsScreen(
                         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text(text = "调试服务器地址", style = MaterialTheme.typography.titleSmall)
                             Text(
-                                text = "真机不能使用 10.0.2.2，请填电脑局域网 IP（例：http://192.168.1.23:8081/）",
+                                text = "真机不能使用 10.0.2.2，请填局域网 IP 或云端地址（例：http://192.168.1.23:8080/）",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

@@ -57,6 +57,12 @@ app.get("/health", (_req, res) => res.json({ ok: true }));
 app.get("/health/db", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
+    await Promise.all([
+      prisma.user.findFirst({ select: { id: true } }),
+      prisma.application.findFirst({ select: { id: true } }),
+      prisma.demand.findFirst({ select: { id: true } }),
+      prisma.chatThread.findFirst({ select: { id: true } }),
+    ]);
     return res.json({ ok: true, db: true });
   } catch (err) {
     const msg = err?.message || String(err);
