@@ -3,73 +3,359 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>老师来了 - Android 下载</title>
-  <meta name="description" content="老师来了 App 官方下载页，提供 Android 安装包下载、功能介绍、安装说明与版本信息。">
+  <title>老师来了 - 官方下载</title>
+  <meta name="description" content="老师来了 App 官方下载页。让家长快速找到合适老师，让老师高效查看并承接家教需求。支持 Android APK 下载。">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <main class="page">
-    <section class="hero card">
-      <div class="hero-copy">
-        <span class="badge">Android 官方下载</span>
-        <h1>老师来了</h1>
-        <p class="subtitle">面向家长与老师的家教需求对接 App，支持登录、发布需求、查看接单、聊天沟通等核心流程。</p>
-        <div class="actions">
-          <a class="button primary" href="/apk/latest">立即下载 APK</a>
-          <a class="button secondary" href="#details">查看详细信息</a>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#top">
+        <span class="brand-mark">师</span>
+        <span>
+          <strong>老师来了</strong>
+          <small>家教需求对接平台</small>
+        </span>
+      </a>
+      <nav class="nav-links">
+        <a href="#intro">应用介绍</a>
+        <a href="#features">核心功能</a>
+        <a href="#install">安装说明</a>
+        <a href="#faq">常见问题</a>
+        <a class="nav-download" href="/apk/latest">立即下载</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero-section">
+      <div class="shell hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Android 官方下载</span>
+          <h1>老师来了</h1>
+          <p class="hero-subtitle">让家长快速找到合适老师，让老师高效查看并承接家教需求。</p>
+          <p class="hero-description">面向家长与老师的家教需求对接平台，支持分角色登录、发布需求、查看接单、在线聊天、申请记录查看等核心流程。整体体验走温暖、可信、轻教育服务风格，适合真机测试和产品演示。</p>
+          <div class="hero-actions">
+            <a class="button primary large" href="/apk/latest">立即下载 Android APK</a>
+            <a class="button secondary large" href="#install">查看安装说明</a>
+          </div>
+          <p class="hero-meta">当前版本 v1.0.0 · 安装包 30.5 MB · 支持 Android 7.0 及以上</p>
+          <div class="hero-highlights">
+            <span>家长 / 老师双角色</span>
+            <span>需求发布与接单</span>
+            <span>聊天沟通闭环</span>
+            <span>官方测试版下载</span>
+          </div>
         </div>
-        <ul class="meta">
-          <li>当前版本：1.0</li>
-          <li>安装包大小：30.5 MB</li>
-          <li>系统要求：Android 7.0 及以上</li>
-        </ul>
-      </div>
-      <div class="hero-panel">
-        <div class="panel-label">推荐下载</div>
-        <div class="panel-name">老师来了 Android 安装包</div>
-        <div class="panel-version">版本 1.0</div>
-        <div class="panel-size">30.5 MB</div>
-        <a class="button primary wide" href="/apk/latest">下载到手机</a>
-        <p class="panel-tip">如果浏览器提示风险，请选择继续下载并允许安装未知来源应用。</p>
+
+        <div class="hero-visual card">
+          <div class="download-card">
+            <div class="download-badge">官方测试版</div>
+            <h2>老师来了 Android App</h2>
+            <p>推荐在安卓手机浏览器中打开本页下载，也可以从电脑端下载后发送到手机安装。</p>
+            <a class="button primary wide" href="/apk/latest">下载 APK</a>
+            <div class="download-note">版本 1.0.0 · 30.5 MB · 更新时间 2026 年 6 月</div>
+          </div>
+
+          <div class="phone-showcase">
+            <article class="phone-card">
+              <div class="phone-screen login-screen">
+                <span class="mini-pill">家长 / 老师</span>
+                <div class="screen-title">分角色登录</div>
+                <div class="input-row"></div>
+                <div class="input-row short"></div>
+                <div class="cta-row"></div>
+              </div>
+              <p>分角色登录，快速进入家长端或老师端</p>
+            </article>
+            <article class="phone-card">
+              <div class="phone-screen demand-screen">
+                <div class="screen-title">发布需求</div>
+                <div class="tag-row">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="list-row"></div>
+                <div class="list-row"></div>
+                <div class="cta-row warm"></div>
+              </div>
+              <p>家长填写年级、科目、地址，快速发单</p>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section id="details" class="grid">
-      <article class="card">
-        <h2>应用简介</h2>
-        <p>老师来了用于连接家长与老师，帮助家长快速发布辅导需求，帮助老师高效查看需求并申请接单。</p>
-        <p>当前版本已经完成云端接口联调，核心业务链路可覆盖登录、个人信息校验、需求发布、老师接单与聊天沟通。</p>
-      </article>
+    <section class="info-strip">
+      <div class="shell info-grid">
+        <article class="metric card">
+          <strong>当前版本</strong>
+          <span>v1.0.0</span>
+          <small>核心功能闭环可体验</small>
+        </article>
+        <article class="metric card">
+          <strong>安装包大小</strong>
+          <span>30.5 MB</span>
+          <small>APK 手动安装</small>
+        </article>
+        <article class="metric card">
+          <strong>系统要求</strong>
+          <span>Android 7.0+</span>
+          <small>建议使用安卓手机浏览器下载</small>
+        </article>
+        <article class="metric card">
+          <strong>适用人群</strong>
+          <span>家长 / 老师</span>
+          <small>当前为官方测试版本</small>
+        </article>
+      </div>
+    </section>
 
-      <article class="card">
-        <h2>核心功能</h2>
-        <ul class="feature-list">
-          <li>家长账号与老师账号分角色登录</li>
-          <li>家长在线发布辅导需求并查看申请记录</li>
-          <li>老师查看开放需求并一键接单</li>
-          <li>接单成功后进入聊天页面继续沟通</li>
-        </ul>
-      </article>
+    <section id="intro" class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">应用介绍</span>
+          <h2>让家教需求发布、接单与沟通更顺畅</h2>
+          <p>老师来了是一款面向家长与老师的家教需求对接 App。家长可以发布辅导需求、查看申请记录并与老师沟通；老师可以浏览开放需求、申请接单，并在接单后进入聊天页面继续沟通。</p>
+        </div>
+        <div class="value-grid">
+          <article class="value-card card">
+            <div class="icon">01</div>
+            <h3>对家长更直接</h3>
+            <p>填写学生年级、科目、时间和地址后即可快速发布家教需求，减少来回沟通成本。</p>
+          </article>
+          <article class="value-card card">
+            <div class="icon">02</div>
+            <h3>对老师更高效</h3>
+            <p>老师可查看开放需求、筛选合适订单并在线申请接单，提升获取需求的效率。</p>
+          </article>
+          <article class="value-card card">
+            <div class="icon">03</div>
+            <h3>沟通链路更完整</h3>
+            <p>接单成功后自动进入聊天页，家长和老师可直接在平台内继续确认细节。</p>
+          </article>
+          <article class="value-card card">
+            <div class="icon">04</div>
+            <h3>信息管理更清晰</h3>
+            <p>支持查看个人信息、需求状态、申请记录和核心接口状态，体验更接近正式产品。</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      <article class="card">
-        <h2>安装说明</h2>
-        <ol class="steps">
-          <li>点击页面中的下载按钮获取 APK 文件。</li>
-          <li>将 APK 下载到 Android 手机后点击安装。</li>
-          <li>若系统提示权限限制，请开启“允许安装未知应用”。</li>
-          <li>安装完成后打开“老师来了”即可体验。</li>
-        </ol>
-      </article>
+    <section id="features" class="section tint">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">核心功能</span>
+          <h2>围绕家长找老师、老师接需求的完整流程设计</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card card">
+            <h3>家长端</h3>
+            <ul>
+              <li>分角色注册与登录</li>
+              <li>发布辅导需求与查看需求列表</li>
+              <li>查看老师申请记录与沟通状态</li>
+            </ul>
+          </article>
+          <article class="feature-card card">
+            <h3>老师端</h3>
+            <ul>
+              <li>查看开放需求</li>
+              <li>选择合适需求并申请接单</li>
+              <li>接单成功后跳转聊天页</li>
+            </ul>
+          </article>
+          <article class="feature-card card">
+            <h3>即时沟通</h3>
+            <ul>
+              <li>接单后进入聊天页面</li>
+              <li>减少线下重复沟通</li>
+              <li>便于继续确认时间与地点</li>
+            </ul>
+          </article>
+          <article class="feature-card card">
+            <h3>平台基础能力</h3>
+            <ul>
+              <li>个人信息校验与云端接口联调</li>
+              <li>健康检查与版本信息展示</li>
+              <li>官方 APK 手动安装下载</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      <article class="card">
-        <h2>接口状态</h2>
-        <ul class="link-list">
-          <li><a href="/health">服务健康检查</a></li>
-          <li><a href="/health/db">数据库健康检查</a></li>
-          <li><a href="/download">下载页固定地址</a></li>
-        </ul>
-      </article>
+    <section class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">使用流程</span>
+          <h2>家长和老师都能快速理解怎么使用</h2>
+        </div>
+        <div class="flow-grid">
+          <article class="flow-card card">
+            <h3>家长使用流程</h3>
+            <ol>
+              <li>注册或登录家长账号</li>
+              <li>完善学生与地址信息</li>
+              <li>发布辅导需求</li>
+              <li>等待老师申请接单</li>
+              <li>在聊天页进一步沟通</li>
+            </ol>
+          </article>
+          <article class="flow-card card">
+            <h3>老师使用流程</h3>
+            <ol>
+              <li>注册或登录老师账号</li>
+              <li>完善教学履历与个人资料</li>
+              <li>查看家长发布的需求</li>
+              <li>选择合适需求并申请接单</li>
+              <li>与家长在线沟通细节</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tint">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">应用截图</span>
+          <h2>预览主要页面与核心操作</h2>
+          <p>当前先使用产品化占位图展示核心页面，后续可替换为真实截图。</p>
+        </div>
+        <div class="shots-grid">
+          <article class="shot-card card">
+            <div class="shot-screen shot-login"></div>
+            <h3>登录页面</h3>
+            <p>支持家长与老师分角色进入，统一登录流程更清晰。</p>
+          </article>
+          <article class="shot-card card">
+            <div class="shot-screen shot-demand"></div>
+            <h3>发布需求</h3>
+            <p>家长快速填写辅导需求并提交，发布成功后可查看记录。</p>
+          </article>
+          <article class="shot-card card">
+            <div class="shot-screen shot-chat"></div>
+            <h3>聊天沟通</h3>
+            <p>老师接单后进入聊天页面，继续和家长确认细节。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="install" class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">安装说明</span>
+          <h2>按照这几步即可完成安装</h2>
+        </div>
+        <div class="install-grid">
+          <article class="install-card card">
+            <h3>安装步骤</h3>
+            <ol>
+              <li>点击“立即下载 Android APK”按钮获取安装包。</li>
+              <li>在 Android 手机上找到下载完成的 APK 文件并点击安装。</li>
+              <li>若系统提示权限限制，请开启“允许安装未知来源应用”。</li>
+              <li>安装完成后打开“老师来了”即可体验。</li>
+            </ol>
+          </article>
+          <article class="install-card card">
+            <h3>下载信息</h3>
+            <ul>
+              <li>当前版本：v1.0.0</li>
+              <li>安装包大小：30.5 MB</li>
+              <li>系统要求：Android 7.0 及以上</li>
+              <li>安装方式：APK 手动安装</li>
+              <li>更新时间：2026 年 6 月</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section safety-block">
+      <div class="shell safety-grid">
+        <article class="card safety-card">
+          <span class="eyebrow">安全提示</span>
+          <h2>官方测试版，请认准当前网址下载</h2>
+          <ul>
+            <li>本安装包为“老师来了”官方测试版，仅用于真机测试与功能体验。</li>
+            <li>请勿从非官方链接下载 APK，避免下载到未知来源安装包。</li>
+            <li>如浏览器提示风险，请确认来源后继续下载。</li>
+            <li>当前版本仍在持续优化，后续将继续更新页面与功能体验。</li>
+          </ul>
+        </article>
+        <article class="card release-card">
+          <span class="eyebrow">版本更新记录</span>
+          <h2>v1.0.0</h2>
+          <ul>
+            <li>完成家长与老师分角色登录</li>
+            <li>支持家长发布辅导需求</li>
+            <li>支持老师查看需求并申请接单</li>
+            <li>支持接单后进入聊天页面</li>
+            <li>完成核心接口联调与下载页上线</li>
+          </ul>
+          <div class="next-plan">下一版本计划：定位与筛选、老师认证展示、订单提醒、聊天体验优化。</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <div class="shell">
+        <div class="section-heading">
+          <span class="eyebrow">常见问题</span>
+          <h2>下载和安装前你可能会关心这些</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item card" open>
+            <summary>为什么安装时会提示未知来源？</summary>
+            <p>因为当前版本通过 APK 文件方式分发，未经过应用商店上架，Android 系统会进行标准安全提醒。</p>
+          </details>
+          <details class="faq-item card">
+            <summary>苹果手机可以安装吗？</summary>
+            <p>当前版本仅支持 Android，iOS 版本暂未开放下载。</p>
+          </details>
+          <details class="faq-item card">
+            <summary>安装后打不开怎么办？</summary>
+            <p>请确认系统版本为 Android 7.0 及以上，并检查网络连接及安装权限是否已开启。</p>
+          </details>
+          <details class="faq-item card">
+            <summary>这是正式版吗？</summary>
+            <p>当前为官方测试版，主要用于功能体验、真机测试和产品展示，后续会继续优化与更新。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta-section">
+      <div class="shell">
+        <div class="cta-card card">
+          <div>
+            <span class="eyebrow">立即体验</span>
+            <h2>现在下载“老师来了”，体验家教需求对接流程</h2>
+            <p>适用于家长发布需求、老师查看并接单、双方在线聊天沟通的完整测试链路。</p>
+          </div>
+          <div class="cta-actions">
+            <a class="button primary large" href="/apk/latest">立即下载 Android APK</a>
+            <a class="button secondary large" href="/health">查看服务状态</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-row">
+      <div>
+        <strong>老师来了</strong>
+        <p>家教需求对接平台，让家长找老师更简单，让老师接单更高效。</p>
+      </div>
+      <div class="footer-links">
+        <a href="/download">官方下载安装页</a>
+        <a href="/apk/latest">Android APK</a>
+        <a href="/health">服务状态</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
