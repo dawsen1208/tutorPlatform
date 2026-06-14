@@ -2677,53 +2677,175 @@ fun TeacherDetailScreen(
 @Composable
 fun ParentApplicationListScreen(
     contentPadding: PaddingValues,
-    parentViewModel: ParentViewModel,
+    sessionState: SessionState,
     onPay: (Int) -> Unit,
     onChat: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val applications by parentViewModel.applications.collectAsStateWithLifecycle()
+    val coroutineScope = rememberCoroutineScope()
     var newestFirst by remember { mutableStateOf(true) }
-    val sortedApplications = remember(applications, newestFirst) {
-        if (newestFirst) applications else applications.asReversed()
+    var loading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var remoteDemands by remember { mutableStateOf<List<com.example.teacher.data.BackendDemandDto>>(emptyList()) }
+    var remoteApplications by remember { mutableStateOf<List<com.example.teacher.data.BackendApplicationDto>>(emptyList()) }
+    val token = sessionState.accessToken?.trim().orEmpty()
+
+    suspend fun refreshRemoteData() {
+        if (token.isBlank()) {
+            remoteDemands = emptyList()
+            remoteApplications = emptyList()
+            loading = false
+            errorMessage = "缺少 Token，请重新登录"
+            return
+        }
+        loading = true
+        errorMessage = null
+        runCatching {
+            val demands = com.example.teacher.data.BackendApi.myDemands(token, limit = 50).items
+            val applications = com.example.teacher.data.BackendApi.myApplications(token, limit = 50).items
+            remoteDemands = if (newestFirst) demands.asReversed() else demands
+            remoteApplications = if (newestFirst) applications.asReversed() else applications
+        }.onFailure {
+            errorMessage = it.message ?: "加载失败"
+        }
+        loading = false
     }
 
-    ScreenScaffold(title = "我的申请", contentPadding = contentPadding, modifier = modifier) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+    LaunchedEffect(token, newestFirst) {
+        refreshRemoteData()
+    }
+
+    ScreenScaffold(title = "我的需求与申请", contentPadding = contentPadding, loading = loading, modifier = modifier) { padding ->
+        AppPullToRefresh(
+            isRefreshing = loading,
+            onRefresh = {
+                if (!loading) coroutineScope.launch { refreshRemoteData() }
+            },
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
         ) {
-            Text(text = "共 ${sortedApplications.size} 条申请", style = MaterialTheme.typography.bodyMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                FilterChip(
-                    selected = newestFirst,
-                    onClick = { newestFirst = true },
-                    label = { Text("最新优先") },
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = "需求 ${remoteDemands.size} 条 · 申请 ${remoteApplications.size} 条",
+                    style = MaterialTheme.typography.bodyMedium,
                 )
-                FilterChip(
-                    selected = !newestFirst,
-                    onClick = { newestFirst = false },
-                    label = { Text("最早优先") },
-                )
-            }
-            HorizontalDivider()
-            if (sortedApplications.isEmpty()) {
-                EmptyStateCard(
-                    title = "暂无申请记录",
-                    description = "去老师列表选择老师并提交申请后，会在这里显示状态与支付信息。",
-                )
-            } else {
-                LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    items(sortedApplications, key = { it.id }) { app ->
-                        ApplicationCard(app = app, onPay = onPay, onChat = onChat)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                    FilterChip(
+                        selected = newestFirst,
+                        onClick = { newestFirst = true },
+                        label = { Text("最新优先") },
+                    )
+                    FilterChip(
+                        selected = !newestFirst,
+                        onClick = { newestFirst = false },
+                        label = { Text("最早优先") },
+                    )
+                    AppOutlinedButton(
+                        onClick = {
+                            coroutineScope.launch { refreshRemoteData() }
+                        },
+                    ) { Text("刷新") }
+                }
+                errorMessage?.let {
+                    AppErrorRetryCard(
+                        message = it,
+                        onRetry = { coroutineScope.launch { refreshRemoteData() } },
+                    )
+                }
+                HorizontalDivider()
+                Text(text = "我发布的需求", style = MaterialTheme.typography.titleSmall)
+                if (remoteDemands.isEmpty()) {
+                    EmptyStateCard(
+                        title = "暂无需求",
+                        description = "发布成功后会立即显示在这里。",
+                    )
+                } else {
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        modifier = Modifier.weight(1f, fill = false),
+                    ) {
+                        items(remoteDemands, key = { it.id }) { demand ->
+                            RemoteDemandCard(demand = demand)
+                        }
+                    }
+                }
+                HorizontalDivider()
+                Text(text = "老师申请记录", style = MaterialTheme.typography.titleSmall)
+                if (remoteApplications.isEmpty()) {
+                    EmptyStateCard(
+                        title = "暂无申请记录",
+                        description = "老师接单后，会在这里显示申请状态并可进入私聊。",
+                    )
+                } else {
+                    LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        items(remoteApplications, key = { it.id }) { app ->
+                            RemoteApplicationCard(app = app, onPay = onPay, onChat = onChat)
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun RemoteDemandCard(
+    demand: com.example.teacher.data.BackendDemandDto,
+    modifier: Modifier = Modifier,
+) {
+    AppCard(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(text = "${demand.studentGrade} · ${demand.subject}", style = MaterialTheme.typography.titleSmall)
+            Text(text = "需求编号：${demand.id}")
+            Text(text = "价格区间：¥${demand.minPrice.toInt()}-${demand.maxPrice.toInt()}/小时")
+            Text(text = "状态：${zhDemandStatus(demand.status)}")
+            Text(text = "时间：${formatRemoteIsoTime(demand.timeStartAt)} - ${formatRemoteIsoTime(demand.timeEndAt)}")
+            Text(text = "发布时间：${formatRemoteIsoTime(demand.createdAt)}")
+        }
+    }
+}
+
+@Composable
+private fun RemoteApplicationCard(
+    app: com.example.teacher.data.BackendApplicationDto,
+    onPay: (Int) -> Unit,
+    onChat: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AppCard(modifier = modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(text = "申请编号：${app.id}", style = MaterialTheme.typography.titleSmall)
+            Text(text = "老师 ID：${app.teacherId}")
+            Text(text = "状态：${zhApplicationStatus(app.status)}")
+            Text(text = "申请时间：${formatRemoteIsoTime(app.createdAt)}")
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppOutlinedButton(onClick = { onChat(app.id) }) { Text("私聊") }
+                if (app.status == "ACCEPTED") {
+                    AppPrimaryButton(onClick = { onPay(app.id) }) { Text("去支付") }
+                }
+            }
+        }
+    }
+}
+
+private fun zhDemandStatus(status: String): String =
+    when (status.trim().uppercase()) {
+        "OPEN" -> "待接单"
+        "CLAIMED" -> "已接单"
+        "CLOSED" -> "已关闭"
+        else -> status
+    }
+
+private fun formatRemoteIsoTime(value: String): String {
+    val millis = runCatching { java.time.Instant.parse(value).toEpochMilli() }.getOrNull() ?: return value
+    return SimpleDateFormat("MM-dd HH:mm", Locale.getDefault()).format(Date(millis))
 }
 
 @Composable

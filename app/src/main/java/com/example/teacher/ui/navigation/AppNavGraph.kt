@@ -1359,7 +1359,7 @@ fun AppNavGraph(
             ) {
                 ParentApplicationListScreen(
                     contentPadding = innerPadding,
-                    parentViewModel = parentViewModel,
+                    sessionState = sessionState,
                     onPay = { applicationId -> navController.navigate(Routes.payment(applicationId)) },
                     onChat = { applicationId -> navController.navigate(Routes.chat(applicationId)) },
                 )
