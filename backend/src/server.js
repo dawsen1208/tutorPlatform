@@ -1,6 +1,8 @@
 require("dotenv").config();
 
+const fs = require("fs");
 const http = require("http");
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -17,6 +19,9 @@ const port = Number(process.env.PORT || "8080");
 const host = String(process.env.HOST || "0.0.0.0").trim() || "0.0.0.0";
 const jwtSecret = String(process.env.JWT_SECRET || "");
 const phoneHashSecret = String(process.env.PHONE_HASH_SECRET || "");
+const publicDir = path.resolve(__dirname, "..", "public");
+const downloadPagePath = path.join(publicDir, "index.html");
+const apkPath = path.join(publicDir, "downloads", "jiaonilaile-android-v1.0.apk");
 
 if (!jwtSecret || !phoneHashSecret) {
   throw new Error("缺少环境变量：JWT_SECRET / PHONE_HASH_SECRET");
@@ -28,29 +33,21 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("combined"));
+app.use(express.static(publicDir));
 
 app.get("/", (_req, res) => {
-  res
-    .status(200)
-    .type("html")
-    .send(
-      [
-        "<!doctype html>",
-        "<html>",
-        "<head><meta charset='utf-8'><meta name='viewport' content='width=device-width, initial-scale=1'></head>",
-        "<body style='font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; padding: 24px'>",
-        "<h2>tutor-platform-backend</h2>",
-        "<p>服务已启动（auto deploy test）。</p>",
-        "<ul>",
-        "<li><a href='/health'>GET /health</a></li>",
-        "<li>POST /api/auth/register</li>",
-        "<li>POST /api/auth/login</li>",
-        "<li>WS /ws?token=JWT</li>",
-        "</ul>",
-        "</body>",
-        "</html>",
-      ].join("")
-    );
+  return res.sendFile(downloadPagePath);
+});
+
+app.get("/download", (_req, res) => {
+  return res.sendFile(downloadPagePath);
+});
+
+app.get("/apk/latest", (_req, res) => {
+  if (!fs.existsSync(apkPath)) {
+    return res.status(404).json({ ok: false, error: "APK_NOT_FOUND" });
+  }
+  return res.download(apkPath, "jiaonilaile-android-v1.0.apk");
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
