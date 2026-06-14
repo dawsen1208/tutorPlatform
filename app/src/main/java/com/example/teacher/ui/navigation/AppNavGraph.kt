@@ -319,28 +319,6 @@ fun AppNavGraph(
     val authViewModel: AuthViewModel = viewModel(factory = factory)
     val parentViewModel: ParentViewModel = viewModel(factory = factory)
     val teacherViewModel: TeacherViewModel = viewModel(factory = factory)
-    val adminViewModel: AdminViewModel = viewModel(factory = factory)
-    val productViewModel: ProductViewModel = viewModel(factory = factory)
-    val commerceViewModel: CommerceViewModel = viewModel(factory = factory)
-    val parentHomeViewModel: ParentHomeViewModel = viewModel(factory = factory)
-    val teacherHomeViewModel: TeacherHomeViewModel = viewModel(factory = factory)
-    val reportViewModel: ReportViewModel = viewModel(factory = factory)
-    val teacherIncomeViewModel: TeacherIncomeViewModel = viewModel(factory = factory)
-    val notificationViewModel: NotificationViewModel = viewModel(factory = factory)
-
-    LaunchedEffect(sessionState.role, sessionState.parentId) {
-        if (sessionState.role == Role.Parent) {
-            sessionState.parentId?.let { commerceViewModel.setParentId(it) }
-        }
-    }
-
-    LaunchedEffect(sessionState.role, sessionState.parentId, sessionState.teacherId) {
-        when (sessionState.role) {
-            Role.Parent -> sessionState.parentId?.let { notificationViewModel.setUser("PARENT", it) }
-            Role.Teacher -> sessionState.teacherId?.let { notificationViewModel.setUser("TEACHER", it) }
-            else -> Unit
-        }
-    }
 
     val backStackEntry = navController.currentBackStackEntryAsState().value
     val currentRoute = backStackEntry?.destination?.route?.substringBefore("/")
@@ -901,7 +879,6 @@ fun AppNavGraph(
                 onParentSuccess = { parent, accessToken ->
                     onSessionChanged(SessionState(role = Role.Parent, parentId = parent.id, accessToken = accessToken))
                     parentViewModel.setParentId(parent.id)
-                    commerceViewModel.setParentId(parent.id)
                     navController.navigate(Routes.ParentHome) {
                         popUpTo(Routes.Onboarding) { inclusive = true }
                     }
@@ -968,7 +945,6 @@ fun AppNavGraph(
                 onLoginSuccess = { parent, accessToken ->
                     onSessionChanged(SessionState(role = Role.Parent, parentId = parent.id, accessToken = accessToken))
                     parentViewModel.setParentId(parent.id)
-                    commerceViewModel.setParentId(parent.id)
                     navController.navigate(Routes.ParentHome) {
                         popUpTo(Routes.Welcome) { inclusive = true }
                     }
@@ -983,7 +959,6 @@ fun AppNavGraph(
                 onRegisterSuccess = { parent, accessToken ->
                     onSessionChanged(SessionState(role = Role.Parent, parentId = parent.id, accessToken = accessToken))
                     parentViewModel.setParentId(parent.id)
-                    commerceViewModel.setParentId(parent.id)
                     navController.navigate(Routes.ParentHome) {
                         popUpTo(Routes.Welcome) { inclusive = true }
                     }
@@ -1006,6 +981,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val parentHomeViewModel: ParentHomeViewModel = viewModel(factory = factory)
                 ParentHomeScreen(
                     contentPadding = innerPadding,
                     sessionState = sessionState,
@@ -1038,6 +1014,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val notificationViewModel: NotificationViewModel = viewModel(factory = factory)
                 ParentMessagesScreen(
                     contentPadding = innerPadding,
                     sessionState = sessionState,
@@ -1139,6 +1116,7 @@ fun AppNavGraph(
                     onGoToParentProfile = goToParentProfile,
                     onGoToTeacherProfile = goToTeacherProfile,
                 ) {
+                    val reportViewModel: ReportViewModel = viewModel(factory = factory)
                     val reporterRole = if (role == "parent") "PARENT" else "TEACHER"
                     val reporterId = if (role == "parent") sessionState.parentId else sessionState.teacherId
                     val reporterPhone = produceState<String?>(initialValue = null, key1 = reporterRole, key2 = reporterId) {
@@ -1212,6 +1190,7 @@ fun AppNavGraph(
         }
 
         composable(Routes.Products) {
+            val productViewModel: ProductViewModel = viewModel(factory = factory)
             ProductListScreen(
                 contentPadding = innerPadding,
                 productViewModel = productViewModel,
@@ -1219,6 +1198,7 @@ fun AppNavGraph(
             )
         }
         composable(Routes.ProductSearch) {
+            val productViewModel: ProductViewModel = viewModel(factory = factory)
             ProductSearchScreen(
                 contentPadding = innerPadding,
                 productViewModel = productViewModel,
@@ -1231,6 +1211,10 @@ fun AppNavGraph(
         ) { entry ->
             val productId = entry.arguments?.getInt("productId") ?: return@composable
             val canPurchase = AccessPolicy.canSubmitApplication(sessionState, parentProfileComplete)
+            val commerceViewModel: CommerceViewModel = viewModel(factory = factory)
+            LaunchedEffect(sessionState.parentId) {
+                sessionState.parentId?.let { commerceViewModel.setParentId(it) }
+            }
             ProductDetailScreen(
                 contentPadding = innerPadding,
                 productId = productId,
@@ -1265,6 +1249,10 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val commerceViewModel: CommerceViewModel = viewModel(factory = factory)
+                LaunchedEffect(sessionState.parentId) {
+                    sessionState.parentId?.let { commerceViewModel.setParentId(it) }
+                }
                 CartScreen(
                     contentPadding = innerPadding,
                     commerceViewModel = commerceViewModel,
@@ -1287,6 +1275,10 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val commerceViewModel: CommerceViewModel = viewModel(factory = factory)
+                LaunchedEffect(sessionState.parentId) {
+                    sessionState.parentId?.let { commerceViewModel.setParentId(it) }
+                }
                 OrdersScreen(
                     contentPadding = innerPadding,
                     commerceViewModel = commerceViewModel,
@@ -1313,6 +1305,10 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val commerceViewModel: CommerceViewModel = viewModel(factory = factory)
+                LaunchedEffect(sessionState.parentId) {
+                    sessionState.parentId?.let { commerceViewModel.setParentId(it) }
+                }
                 OrderDetailScreen(
                     contentPadding = innerPadding,
                     orderId = orderId,
@@ -1436,6 +1432,8 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val teacherHomeViewModel: TeacherHomeViewModel = viewModel(factory = factory)
+                val notificationViewModel: NotificationViewModel = viewModel(factory = factory)
                 TeacherHomeScreen(
                     contentPadding = innerPadding,
                     sessionState = sessionState,
@@ -1468,6 +1466,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val teacherHomeViewModel: TeacherHomeViewModel = viewModel(factory = factory)
                 TeacherDemandsScreen(
                     contentPadding = innerPadding,
                     sessionState = sessionState,
@@ -1491,6 +1490,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val notificationViewModel: NotificationViewModel = viewModel(factory = factory)
                 TeacherNotificationsScreen(
                     contentPadding = innerPadding,
                     sessionState = sessionState,
@@ -1618,6 +1618,7 @@ fun AppNavGraph(
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
                 val teacherId = sessionState.teacherId ?: return@RequireAccess
+                val teacherIncomeViewModel: TeacherIncomeViewModel = viewModel(factory = factory)
                 LaunchedEffect(teacherId) {
                     teacherIncomeViewModel.setTeacherId(teacherId)
                 }
@@ -1725,6 +1726,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminUsersScreen(contentPadding = innerPadding, adminViewModel = adminViewModel)
             }
         }
@@ -1743,6 +1745,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminTeacherReviewScreen(contentPadding = innerPadding, adminViewModel = adminViewModel)
             }
         }
@@ -1761,6 +1764,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminOrdersScreen(contentPadding = innerPadding, adminViewModel = adminViewModel)
             }
         }
@@ -1779,6 +1783,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminReportsScreen(contentPadding = innerPadding, adminViewModel = adminViewModel)
             }
         }
@@ -1797,6 +1802,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminStatsScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1822,6 +1828,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminStatsScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1847,6 +1854,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminParentListScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1868,6 +1876,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminTeacherListScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1889,6 +1898,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminApplicationListScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1910,6 +1920,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val adminViewModel: AdminViewModel = viewModel(factory = factory)
                 AdminPaymentRecordScreen(
                     contentPadding = innerPadding,
                     adminViewModel = adminViewModel,
@@ -1931,6 +1942,7 @@ fun AppNavGraph(
                 onGoToParentProfile = goToParentProfile,
                 onGoToTeacherProfile = goToTeacherProfile,
             ) {
+                val productViewModel: ProductViewModel = viewModel(factory = factory)
                 AdminProductManageScreen(
                     contentPadding = innerPadding,
                     productViewModel = productViewModel,
