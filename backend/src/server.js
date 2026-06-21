@@ -21,7 +21,8 @@ const jwtSecret = String(process.env.JWT_SECRET || "");
 const phoneHashSecret = String(process.env.PHONE_HASH_SECRET || "");
 const publicDir = path.resolve(__dirname, "..", "public");
 const downloadPagePath = path.join(publicDir, "index.html");
-const apkPath = path.join(publicDir, "downloads", "jiaonilaile-android-v1.0.apk");
+const apkFileName = "jiaonilaile-android-v1.0.apk";
+const apkPath = path.join(publicDir, "downloads", apkFileName);
 
 if (!jwtSecret || !phoneHashSecret) {
   throw new Error("缺少环境变量：JWT_SECRET / PHONE_HASH_SECRET");
@@ -29,25 +30,83 @@ if (!jwtSecret || !phoneHashSecret) {
 
 const app = express();
 
-app.use(helmet());
+app.disable("x-powered-by");
+app.set("trust proxy", 1);
+
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: "same-origin" },
+  }),
+);
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("combined"));
-app.use(express.static(publicDir, { index: false }));
+
+app.use(
+  express.static(publicDir, {
+    etag: true,
+    lastModified: true,
+    maxAge: "7d",
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-store");
+      }
+      if (filePath.endsWith(".apk")) {
+        res.setHeader("Cache-Control", "private, no-store");
+        res.setHeader("Content-Type", "application/vnd.android.package-archive");
+      }
+    },
+  }),
+);
 
 app.get("/", (_req, res) => {
   return res.redirect(302, "/download");
 });
 
 app.get("/download", (_req, res) => {
+  if (!fs.existsSync(downloadPagePath)) {
+    return res.status(404).json({ ok: false, error: "DOWNLOAD_PAGE_NOT_FOUND" });
+  }
+  res.setHeader("Cache-Control", "no-store");
   return res.sendFile(downloadPagePath);
+});
+
+app.get("/download/meta", (_req, res) => {
+  const exists = fs.existsSync(apkPath);
+  const stat = exists ? fs.statSync(apkPath) : null;
+  return res.json({
+    ok: true,
+    app: "老师来了",
+    platform: "android",
+    version: "1.0.0",
+    minAndroid: "7.0",
+    fileName: apkFileName,
+    downloadUrl: "/apk/latest",
+    apkFound: exists,
+    sizeBytes: stat?.size ?? null,
+    displaySize: "30.5 MB",
+  });
 });
 
 app.get("/apk/latest", (_req, res) => {
   if (!fs.existsSync(apkPath)) {
     return res.status(404).json({ ok: false, error: "APK_NOT_FOUND" });
   }
-  return res.download(apkPath, "jiaonilaile-android-v1.0.apk");
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Content-Type", "application/vnd.android.package-archive");
+  return res.download(apkPath, apkFileName);
+});
+
+app.head("/apk/latest", (_req, res) => {
+  if (!fs.existsSync(apkPath)) {
+    return res.sendStatus(404);
+  }
+  const stat = fs.statSync(apkPath);
+  res.setHeader("Cache-Control", "private, no-store");
+  res.setHeader("Content-Type", "application/vnd.android.package-archive");
+  res.setHeader("Content-Disposition", `attachment; filename=\"${apkFileName}\"`);
+  res.setHeader("Content-Length", String(stat.size));
+  return res.sendStatus(200);
 });
 
 app.get("/health", (_req, res) => res.json({ ok: true }));
@@ -154,6 +213,8 @@ async function startServer() {
     try {
       const boundPort = await listenOnce(currentPort);
       console.log(`API listening on http://${host}:${boundPort}`);
+      console.log(`Download: http://localhost:${boundPort}/download`);
+      console.log(`APK: http://localhost:${boundPort}/apk/latest`);
       console.log(`Health: http://localhost:${boundPort}/health`);
       return;
     } catch (err) {

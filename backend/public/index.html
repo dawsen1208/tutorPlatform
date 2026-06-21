@@ -3,36 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>老师来了 - 官方下载</title>
-  <meta name="description" content="老师来了 App 官方下载页。让家长快速找到合适老师，让老师高效查看并承接家教需求。支持 Android APK 下载。">
+  <title>老师来了 - Android 官方下载</title>
+  <meta name="description" content="老师来了 App 官方下载页。面向家长与老师的家教需求对接平台，支持发布需求、老师接单、在线聊天与 Android APK 下载。">
+  <meta name="theme-color" content="#FFD86B">
+  <meta property="og:title" content="老师来了 - Android 官方下载">
+  <meta property="og:description" content="连接家长与老师的高效家教对接平台。下载 Android APK，体验发布需求、老师接单和聊天沟通流程。">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#download">跳转到下载</a>
+
   <header class="site-header">
     <div class="shell nav">
-      <a class="brand" href="#top">
+      <a class="brand" href="#top" aria-label="老师来了首页">
         <span class="brand-mark">
-          <img src="/images/app-icon.png" alt="老师来了 App 图标">
+          <img src="/images/app-icon.png" alt="老师来了 App 图标" onerror="this.style.display='none'; this.parentElement.dataset.fallback='教';">
         </span>
-        <span>
+        <span class="brand-copy">
           <strong>老师来了</strong>
           <small>家教需求对接平台</small>
         </span>
       </a>
-      <nav class="nav-links nav-links-desktop">
-        <a href="#value">产品特色</a>
+
+      <nav class="nav-links nav-links-desktop" aria-label="页面导航">
+        <a href="#value">产品价值</a>
         <a href="#features">核心功能</a>
-        <a href="#screens">应用截图</a>
+        <a href="#flow">使用流程</a>
+        <a href="#screens">界面预览</a>
         <a href="#install">安装说明</a>
         <a href="#faq">常见问题</a>
         <a class="nav-download" href="/apk/latest">立即下载</a>
       </nav>
+
       <details class="mobile-menu">
-        <summary>菜单</summary>
-        <nav class="mobile-menu-panel">
-          <a href="#value">产品特色</a>
+        <summary aria-label="打开菜单">菜单</summary>
+        <nav class="mobile-menu-panel" aria-label="移动端导航">
+          <a href="#value">产品价值</a>
           <a href="#features">核心功能</a>
-          <a href="#screens">应用截图</a>
+          <a href="#flow">使用流程</a>
+          <a href="#screens">界面预览</a>
           <a href="#install">安装说明</a>
           <a href="#faq">常见问题</a>
           <a class="nav-download mobile-download" href="/apk/latest">立即下载</a>
@@ -42,74 +52,113 @@
   </header>
 
   <main id="top">
-    <section class="hero-section">
+    <section class="hero-section" aria-labelledby="hero-title">
+      <div class="hero-orb hero-orb-one"></div>
+      <div class="hero-orb hero-orb-two"></div>
+      <div class="hero-pattern"></div>
+
       <div class="shell hero-grid">
         <div class="hero-copy fade-up">
-          <span class="eyebrow">Android 官方下载</span>
-          <h1>老师来了</h1>
-          <p class="hero-subtitle">连接家长与老师的高效家教对接平台</p>
-          <p class="hero-description">面向真实家教服务场景，支持家长发布辅导需求、老师查看开放订单、在线申请接单，并在接单成功后进入聊天沟通。页面定位为温暖、可信、现代的产品下载落地页，让家长与老师都能快速理解产品价值并放心下载。</p>
-          <div class="hero-actions">
-            <a class="button primary large" href="/apk/latest">立即下载 Android APK</a>
-            <a class="button secondary large" href="#features">查看功能亮点</a>
+          <div class="hero-kicker">
+            <span class="eyebrow">Android 官方下载</span>
+            <span class="status-pill"><span class="status-dot"></span>云端接口已联调</span>
           </div>
-          <div class="hero-highlights">
+
+          <h1 id="hero-title">老师来了</h1>
+          <p class="hero-subtitle">让家长找老师更简单，让老师接单更高效</p>
+          <p class="hero-description">面向真实家教服务场景，支持家长发布辅导需求、老师查看开放订单、在线申请接单，并在接单成功后进入聊天沟通。</p>
+
+          <div class="hero-actions" id="download">
+            <a class="button primary large button-icon" href="/apk/latest" aria-label="立即下载老师来了 Android APK">
+              <span class="button-symbol">↓</span>
+              立即下载 Android APK
+            </a>
+            <a class="button secondary large" href="#screens">查看界面预览</a>
+          </div>
+
+          <div class="hero-highlights" aria-label="应用基础信息">
             <span>v1.0.0</span>
             <span>30.5 MB</span>
             <span>Android 7.0+</span>
             <span>官方测试版</span>
           </div>
+
+          <div class="trust-row" aria-label="产品特点">
+            <span>家长端</span>
+            <span>老师端</span>
+            <span>需求发布</span>
+            <span>接单沟通</span>
+          </div>
         </div>
 
-        <div class="hero-visual fade-up">
-          <div class="visual-glow glow-one"></div>
-          <div class="visual-glow glow-two"></div>
+        <div class="hero-visual fade-up" aria-label="老师来了应用预览">
+          <div class="hero-glass-panel"></div>
+
           <div class="hero-app-card card">
-            <img class="hero-app-icon" src="/images/app-icon.png" alt="老师来了 图标">
+            <img class="hero-app-icon" src="/images/app-icon.png" alt="老师来了 App 图标" onerror="this.style.display='none';">
             <div>
               <strong>老师来了 App</strong>
-              <span>官方图标已接入，真实页面截图可继续补充到下载页中。</span>
+              <span>家长发布需求 · 老师查看接单 · 双方在线沟通</span>
             </div>
           </div>
+
           <div class="float-card float-card-top">
-            <strong>家长已发布需求</strong>
-            <span>语文辅导 · 初二 · 上门沟通</span>
+            <span class="float-badge parent">家长端</span>
+            <strong>已发布辅导需求</strong>
+            <span>数学辅导 · 初二 · 每周 2 次</span>
           </div>
           <div class="float-card float-card-middle">
+            <span class="float-badge teacher">老师端</span>
             <strong>老师已申请接单</strong>
-            <span>查看详情后可进入下一步沟通</span>
+            <span>查看需求后可继续沟通</span>
           </div>
           <div class="float-card float-card-bottom">
-            <strong>接单后可聊天沟通</strong>
-            <span>时间、地点、安排统一在线确认</span>
+            <span class="float-badge chat">沟通</span>
+            <strong>进入聊天页面</strong>
+            <span>确认时间、地点和辅导安排</span>
           </div>
+
           <div class="phone-stage">
-            <article class="device device-primary">
-              <div class="device-header">
-                <span class="mini-pill">老师来了</span>
-                <span class="device-status">首页</span>
+            <article class="device device-primary" aria-label="家长端预览">
+              <div class="device-topbar">
+                <span></span><span></span><span></span>
               </div>
-              <div class="phone-screen login-screen">
-                <div class="screen-title">分角色登录</div>
-                <div class="input-row"></div>
-                <div class="input-row short"></div>
-                <div class="cta-row"></div>
+              <div class="phone-screen parent-screen">
+                <div class="screen-header">
+                  <span>老师来了</span>
+                  <em>家长端</em>
+                </div>
+                <div class="screen-hero-card">
+                  <strong>发布辅导需求</strong>
+                  <small>选择年级、科目、地址和需求说明</small>
+                </div>
+                <div class="mock-input wide"></div>
+                <div class="mock-input"></div>
+                <div class="mock-tags"><span></span><span></span><span></span></div>
+                <div class="mock-button"></div>
               </div>
             </article>
-            <article class="device device-secondary">
-              <div class="device-header">
-                <span class="mini-pill">需求中心</span>
-                <span class="device-status">接单</span>
+
+            <article class="device device-secondary" aria-label="老师端预览">
+              <div class="device-topbar">
+                <span></span><span></span><span></span>
               </div>
-              <div class="phone-screen demand-screen">
-                <div class="screen-title">发布需求 / 接单沟通</div>
-                <div class="tag-row">
+              <div class="phone-screen teacher-screen">
+                <div class="screen-header">
+                  <span>需求中心</span>
+                  <em>老师端</em>
+                </div>
+                <div class="demand-mini-card">
+                  <strong>初三英语提升</strong>
+                  <small>距离近 · 可沟通 · 待接单</small>
+                </div>
+                <div class="demand-mini-card muted-card">
+                  <strong>小学数学辅导</strong>
+                  <small>周末上课 · 家长已发布</small>
+                </div>
+                <div class="chat-preview">
                   <span></span><span></span><span></span>
                 </div>
-                <div class="list-row"></div>
-                <div class="list-row"></div>
-                <div class="list-row short-list"></div>
-                <div class="cta-row warm"></div>
               </div>
             </article>
           </div>
@@ -117,116 +166,135 @@
       </div>
     </section>
 
-    <section class="info-strip section-compact">
-      <div class="shell info-grid">
+    <section class="quick-metrics section-compact" aria-label="应用信息概览">
+      <div class="shell metric-grid">
         <article class="metric card">
           <div class="metric-icon">V</div>
-          <strong>当前版本</strong>
-          <span>v1.0.0</span>
-          <small>首个 Android 测试版本</small>
+          <div>
+            <strong>当前版本</strong>
+            <span>v1.0.0</span>
+            <small>Android 测试版本</small>
+          </div>
         </article>
         <article class="metric card">
           <div class="metric-icon">M</div>
-          <strong>安装包大小</strong>
-          <span>30.5 MB</span>
-          <small>轻量安装，快速体验</small>
+          <div>
+            <strong>安装包大小</strong>
+            <span>30.5 MB</span>
+            <small>轻量安装，快速体验</small>
+          </div>
         </article>
         <article class="metric card">
           <div class="metric-icon">S</div>
-          <strong>系统要求</strong>
-          <span>Android 7.0+</span>
-          <small>支持主流 Android 手机</small>
+          <div>
+            <strong>系统要求</strong>
+            <span>Android 7.0+</span>
+            <small>支持主流 Android 手机</small>
+          </div>
         </article>
         <article class="metric card">
           <div class="metric-icon">R</div>
-          <strong>适用人群</strong>
-          <span>家长 / 老师</span>
-          <small>双角色流程已支持</small>
+          <div>
+            <strong>适用角色</strong>
+            <span>家长 / 老师</span>
+            <small>双角色流程已支持</small>
+          </div>
         </article>
       </div>
     </section>
 
-    <section id="value" class="section">
+    <section id="value" class="section value-section">
       <div class="shell">
-        <div class="section-heading">
+        <div class="section-heading centered">
           <span class="eyebrow">产品价值</span>
-          <h2>让家教需求对接更简单</h2>
-          <p>围绕家长找老师、老师看需求、双方沟通三个核心场景，构建清晰高效的家教服务流程。老师来了不是单纯的说明页，而是能让用户一眼理解业务流程和下载价值的 App 官方落地页。</p>
+          <h2>围绕真实家教流程设计，而不是只做一个下载链接</h2>
+          <p>页面重点展示“发布需求 → 老师接单 → 聊天沟通”的完整闭环，让家长和老师打开网页后就能理解 App 的核心作用。</p>
         </div>
-        <div class="value-grid value-grid-3">
+
+        <div class="value-grid">
           <article class="value-card card value-yellow">
-            <div class="icon">01</div>
+            <div class="value-illustration parent-illustration"></div>
+            <span class="card-index">01</span>
             <h3>家长发布更省心</h3>
-            <p>家长可以填写学生信息、辅导科目、地址与需求说明，快速发布真实辅导需求。</p>
+            <p>家长可以填写学生信息、辅导科目、地址与需求说明，快速形成可被老师查看的辅导需求。</p>
           </article>
           <article class="value-card card value-green">
-            <div class="icon">02</div>
+            <div class="value-illustration teacher-illustration"></div>
+            <span class="card-index">02</span>
             <h3>老师接单更高效</h3>
-            <p>老师可以查看开放需求，选择合适的家教机会并申请接单，提升接单效率。</p>
+            <p>老师能够浏览开放需求，查看需求详情，并对合适的家教机会发起接单申请。</p>
           </article>
           <article class="value-card card value-orange">
-            <div class="icon">03</div>
+            <div class="value-illustration chat-illustration"></div>
+            <span class="card-index">03</span>
             <h3>沟通流程更清晰</h3>
-            <p>接单成功后，家长和老师可进入聊天页面继续确认时间、地点和辅导细节。</p>
+            <p>接单成功后，家长和老师进入聊天页面，继续确认时间、地点、科目和辅导安排。</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="features" class="section tint">
+    <section id="features" class="section feature-section">
       <div class="shell">
-        <div class="section-heading">
-          <span class="eyebrow">核心功能</span>
-          <h2>当前版本已覆盖家教需求对接的主要业务路径</h2>
-          <p>覆盖分角色登录、家长发布需求、老师查看并申请接单、接单后聊天沟通、个人信息管理等流程，适合进行真机测试和流程体验。</p>
+        <div class="section-heading split-heading">
+          <div>
+            <span class="eyebrow">核心功能</span>
+            <h2>当前版本覆盖家教需求对接的主要业务路径</h2>
+          </div>
+          <p>功能模块不再使用普通文字列表，而是通过卡片、图标和状态标签展示，让下载页更像一个正式产品官网。</p>
         </div>
+
         <div class="feature-grid">
           <article class="feature-card card">
-            <div class="feature-icon">01</div>
+            <div class="feature-icon">👥</div>
             <h3>分角色登录</h3>
             <p>家长与老师使用不同身份登录，进入各自对应的功能页面。</p>
           </article>
           <article class="feature-card card">
-            <div class="feature-icon">02</div>
+            <div class="feature-icon">📝</div>
             <h3>家长发布需求</h3>
-            <p>支持家长填写辅导需求，提交后形成开放需求记录。</p>
+            <p>填写学生、科目、年级和地址信息，提交后形成开放需求。</p>
           </article>
           <article class="feature-card card">
-            <div class="feature-icon">03</div>
+            <div class="feature-icon">🔎</div>
             <h3>老师查看需求</h3>
-            <p>老师可以浏览家长发布的需求，了解学生年级、科目和需求描述。</p>
+            <p>老师浏览家长发布的需求，了解课程类型与沟通条件。</p>
           </article>
           <article class="feature-card card">
-            <div class="feature-icon">04</div>
+            <div class="feature-icon">✅</div>
             <h3>在线申请接单</h3>
-            <p>老师可对合适的需求发起接单申请，推动需求进入下一步。</p>
+            <p>老师可对合适需求发起申请，推动需求进入下一步。</p>
           </article>
           <article class="feature-card card">
-            <div class="feature-icon">05</div>
+            <div class="feature-icon">💬</div>
             <h3>聊天沟通</h3>
-            <p>接单成功后，双方可进入聊天页面继续沟通辅导安排。</p>
+            <p>接单成功后，双方可进入聊天页面继续确认辅导安排。</p>
           </article>
           <article class="feature-card card">
-            <div class="feature-icon">06</div>
-            <h3>个人信息管理</h3>
-            <p>支持基础信息校验、角色资料展示与申请记录查看。</p>
+            <div class="feature-icon">🛡️</div>
+            <h3>信息管理</h3>
+            <p>支持基础资料展示、信息校验、申请记录与状态查看。</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section id="flow" class="section flow-section">
       <div class="shell">
-        <div class="section-heading">
+        <div class="section-heading centered">
           <span class="eyebrow">使用流程</span>
           <h2>家长和老师都能快速上手</h2>
-          <p>围绕真实家教服务流程设计，减少无效操作，让需求发布、接单和沟通更直接。</p>
+          <p>用流程图替代传统说明文字，明确展示两个角色在 App 内的使用路径。</p>
         </div>
+
         <div class="flow-grid">
-          <article class="flow-card card">
-            <h3>家长使用流程</h3>
-            <div class="step-track step-track-parent">
-              <div class="step-card"><span>01</span><strong>登录家长账号</strong></div>
+          <article class="flow-card card parent-flow">
+            <div class="flow-title-row">
+              <span class="role-badge">家长端</span>
+              <h3>从发布需求到沟通老师</h3>
+            </div>
+            <div class="step-track">
+              <div class="step-card"><span>01</span><strong>登录账号</strong></div>
               <div class="step-arrow">→</div>
               <div class="step-card"><span>02</span><strong>完善学生信息</strong></div>
               <div class="step-arrow">→</div>
@@ -237,10 +305,14 @@
               <div class="step-card"><span>05</span><strong>进入聊天沟通</strong></div>
             </div>
           </article>
-          <article class="flow-card card">
-            <h3>老师使用流程</h3>
-            <div class="step-track step-track-teacher">
-              <div class="step-card"><span>01</span><strong>登录老师账号</strong></div>
+
+          <article class="flow-card card teacher-flow">
+            <div class="flow-title-row">
+              <span class="role-badge">老师端</span>
+              <h3>从浏览需求到申请接单</h3>
+            </div>
+            <div class="step-track">
+              <div class="step-card"><span>01</span><strong>登录账号</strong></div>
               <div class="step-arrow">→</div>
               <div class="step-card"><span>02</span><strong>完善教学资料</strong></div>
               <div class="step-arrow">→</div>
@@ -255,46 +327,39 @@
       </div>
     </section>
 
-    <section id="screens" class="section tint">
+    <section id="screens" class="section screens-section">
       <div class="shell">
-        <div class="section-heading">
-          <span class="eyebrow">应用截图</span>
-          <h2>应用界面预览</h2>
-          <p>从登录、需求发布到老师接单和聊天沟通，核心流程一目了然。当前仓库中尚未包含真机截图文件，我已接入真实 App 图标并预留 5 个截图位，后续可直接替换为真实截图。</p>
+        <div class="section-heading split-heading">
+          <div>
+            <span class="eyebrow">界面预览</span>
+            <h2>核心页面以手机卡片形式展示</h2>
+          </div>
+          <p>当前先使用高保真占位界面展示结构，后续只需将真实截图替换到对应卡片即可。</p>
         </div>
-        <div class="shots-rail">
-          <article class="shot-card card">
-            <div class="shot-screen shot-login">
-              <img class="shot-watermark" src="/images/app-icon.png" alt="老师来了 图标">
-            </div>
+
+        <div class="screens-rail" aria-label="应用截图展示">
+          <article class="screen-card card">
+            <div class="mock-phone login-mock"><span>登录</span></div>
             <h3>分角色登录</h3>
             <p>家长与老师进入不同功能路径</p>
           </article>
-          <article class="shot-card card">
-            <div class="shot-screen shot-list">
-              <img class="shot-watermark" src="/images/app-icon.png" alt="老师来了 图标">
-            </div>
+          <article class="screen-card card">
+            <div class="mock-phone list-mock"><span>需求</span></div>
             <h3>需求列表</h3>
             <p>查看当前开放的家教需求</p>
           </article>
-          <article class="shot-card card">
-            <div class="shot-screen shot-demand">
-              <img class="shot-watermark" src="/images/app-icon.png" alt="老师来了 图标">
-            </div>
+          <article class="screen-card card">
+            <div class="mock-phone form-mock"><span>发布</span></div>
             <h3>发布需求</h3>
             <p>家长快速填写学生与辅导信息</p>
           </article>
-          <article class="shot-card card">
-            <div class="shot-screen shot-claim">
-              <img class="shot-watermark" src="/images/app-icon.png" alt="老师来了 图标">
-            </div>
+          <article class="screen-card card">
+            <div class="mock-phone accept-mock"><span>接单</span></div>
             <h3>老师接单</h3>
             <p>老师查看需求详情并申请接单</p>
           </article>
-          <article class="shot-card card">
-            <div class="shot-screen shot-chat">
-              <img class="shot-watermark" src="/images/app-icon.png" alt="老师来了 图标">
-            </div>
+          <article class="screen-card card">
+            <div class="mock-phone chat-mock"><span>聊天</span></div>
             <h3>在线聊天</h3>
             <p>接单成功后继续沟通辅导安排</p>
           </article>
@@ -302,91 +367,85 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section download-section" aria-labelledby="download-title">
       <div class="shell">
         <div class="download-banner card">
           <div class="download-banner-copy">
-            <span class="eyebrow">下载行动区</span>
-            <h2>立即体验老师来了</h2>
-            <p>下载 Android 安装包，体验家长发布需求、老师在线接单和聊天沟通的完整流程。所有下载按钮均使用同一个官方 APK 链接。</p>
-            <a class="button primary large" href="/apk/latest">立即下载 Android APK</a>
-            <p class="download-banner-meta">当前版本 v1.0.0 · 30.5 MB · Android 7.0 及以上</p>
+            <span class="eyebrow">官方下载</span>
+            <h2 id="download-title">立即体验老师来了</h2>
+            <p>下载 Android 安装包，体验家长发布需求、老师在线接单和聊天沟通的完整流程。所有下载按钮均复用同一个官方 APK 链接。</p>
+            <div class="download-actions">
+              <a class="button primary large button-icon" href="/apk/latest"><span class="button-symbol">↓</span>立即下载 Android APK</a>
+              <span class="download-meta">v1.0.0 · 30.5 MB · Android 7.0+</span>
+            </div>
           </div>
-          <div class="download-banner-side">
+
+          <div class="download-side">
             <div class="qr-card">
-              <strong>扫码下载区域</strong>
-              <div class="qr-placeholder">QR</div>
-              <p>如果你后续提供真实二维码，这里可直接替换为扫码下载入口。</p>
+              <strong>手机扫码下载</strong>
+              <div class="qr-placeholder" aria-label="二维码占位">QR</div>
+              <p>后续可将真实二维码图片替换到这里，方便电脑端扫码下载。</p>
             </div>
-            <div class="tip-card">
-              <strong>下载提示</strong>
-              <p>推荐使用 Android 手机浏览器打开本页面并下载 APK。如使用电脑访问，可将下载链接发送到手机后安装。</p>
+            <div class="apk-card">
+              <span class="apk-icon">APK</span>
+              <div>
+                <strong>官方测试包</strong>
+                <small>请通过本页面或 /apk/latest 下载，避免安装非官方文件。</small>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="install" class="section">
+    <section id="install" class="section install-section">
       <div class="shell">
-        <div class="section-heading">
+        <div class="section-heading centered">
           <span class="eyebrow">安装说明</span>
-          <h2>安装说明与安全提示</h2>
+          <h2>4 步完成 Android 安装</h2>
+          <p>将原本的普通文字说明改成步骤卡片，更清晰，也更适合手机用户阅读。</p>
         </div>
-        <div class="install-safety-grid">
-          <article class="install-card card">
-            <h3>安装说明</h3>
-            <div class="install-steps">
-              <div class="install-step">
-                <span>01</span>
-                <div>
-                  <strong>下载 APK</strong>
-                  <p>点击页面中的“立即下载 Android APK”按钮获取安装包。</p>
-                </div>
-              </div>
-              <div class="install-step">
-                <span>02</span>
-                <div>
-                  <strong>打开安装包</strong>
-                  <p>下载完成后，在 Android 手机上点击 APK 文件开始安装。</p>
-                </div>
-              </div>
-              <div class="install-step">
-                <span>03</span>
-                <div>
-                  <strong>允许安装</strong>
-                  <p>如系统提示权限限制，请开启“允许安装未知来源应用”。</p>
-                </div>
-              </div>
-              <div class="install-step">
-                <span>04</span>
-                <div>
-                  <strong>启动应用</strong>
-                  <p>安装完成后，打开“老师来了”即可体验。</p>
-                </div>
-              </div>
-            </div>
+
+        <div class="install-grid">
+          <article class="install-step card">
+            <span>01</span>
+            <h3>下载 APK</h3>
+            <p>点击页面中的“立即下载 Android APK”按钮获取安装包。</p>
           </article>
-          <article class="safety-card card">
-            <h3>安全提示</h3>
-            <p>当前安装包为“老师来了”官方测试版，仅用于功能体验和真机测试。请确认页面来源后再下载安装，不要从非官方渠道下载 APK。</p>
-            <div class="safety-tags">
-              <span>官方测试版</span>
-              <span>请勿转发未知来源安装包</span>
-              <span>安装前请确认系统提示</span>
-            </div>
-            <ul>
-              <li>本页面和 `/apk/latest` 为当前官方测试下载入口。</li>
-              <li>如浏览器提示风险，请确认来源后继续下载。</li>
-              <li>当前版本主要用于功能体验、接口联调和真机测试。</li>
-            </ul>
+          <article class="install-step card">
+            <span>02</span>
+            <h3>打开安装包</h3>
+            <p>下载完成后，在 Android 手机上点击 APK 文件开始安装。</p>
+          </article>
+          <article class="install-step card">
+            <span>03</span>
+            <h3>允许安装</h3>
+            <p>如系统提示权限限制，请开启“允许安装未知来源应用”。</p>
+          </article>
+          <article class="install-step card">
+            <span>04</span>
+            <h3>启动应用</h3>
+            <p>安装完成后，打开“老师来了”即可体验。</p>
           </article>
         </div>
+
+        <aside class="safety-card card">
+          <div>
+            <span class="eyebrow">安全提示</span>
+            <h3>请确认来源后再安装</h3>
+            <p>当前安装包为“老师来了”官方测试版，仅用于功能体验和真机测试。请勿从非官方渠道下载 APK。</p>
+          </div>
+          <div class="safety-tags">
+            <span>官方测试版</span>
+            <span>请勿安装未知来源安装包</span>
+            <span>安装前确认系统提示</span>
+          </div>
+        </aside>
       </div>
     </section>
 
-    <section id="faq" class="section safety-block">
-      <div class="shell safety-grid">
+    <section id="faq" class="section faq-section">
+      <div class="shell faq-grid">
         <div>
           <div class="section-heading">
             <span class="eyebrow">常见问题</span>
@@ -415,15 +474,16 @@
             </details>
           </div>
         </div>
-        <div class="release-panel">
-          <span class="eyebrow">常见问题</span>
-          <h2>版本更新记录</h2>
+
+        <aside class="release-panel">
+          <span class="eyebrow">版本记录</span>
+          <h2>v1.0.0</h2>
           <div class="timeline card">
             <div class="timeline-node">
-              <div class="timeline-dot"></div>
+              <span class="timeline-dot"></span>
               <div>
-                <strong>v1.0.0</strong>
-                <small>发布时间：2026 年 6 月</small>
+                <strong>发布时间：2026 年 6 月</strong>
+                <small>Android 官方测试版本</small>
               </div>
             </div>
             <ul>
@@ -435,13 +495,12 @@
               <li>完成核心后端接口联调</li>
             </ul>
           </div>
-          <div class="next-plan">
-            下一版本计划：增加定位权限与附近需求筛选、优化个人主页、增加老师资料展示、优化聊天体验、增加需求状态提醒。
+          <div class="next-plan card">
+            <strong>下一版本计划</strong>
+            <p>增加定位权限与附近需求筛选、优化个人主页、增加老师资料展示、优化聊天体验、增加需求状态提醒。</p>
           </div>
-          <div class="release-links">
-            <a class="button primary" href="/apk/latest">立即下载 Android APK</a>
-          </div>
-        </div>
+          <a class="button primary large" href="/apk/latest">立即下载 Android APK</a>
+        </aside>
       </div>
     </section>
   </main>
@@ -465,5 +524,10 @@
     </div>
     <div class="shell footer-copy">© 2026 老师来了. All rights reserved.</div>
   </footer>
+
+  <div class="mobile-sticky-download">
+    <span>老师来了 v1.0.0</span>
+    <a href="/apk/latest">立即下载</a>
+  </div>
 </body>
 </html>

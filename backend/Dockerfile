@@ -10,6 +10,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 COPY src ./src
+COPY scripts ./scripts
 COPY public ./public
 
 ENV PORT=8080

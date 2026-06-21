@@ -70,5 +70,8 @@ jobs:
             curl -f http://127.0.0.1:8080/health
             curl -f http://127.0.0.1:8080/health/db
 
+            echo "Syncing demo seed data..."
+            docker compose exec -T api node scripts/seed-demo-data.js
+
             docker compose ps
           EOF
